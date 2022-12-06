@@ -29,7 +29,7 @@ class QQMessengerChannel(SlaveChannel):
     __version__ = version.__version__
 
     supported_message_types = {MsgType.Text, MsgType.Sticker, MsgType.Image,
-                               MsgType.Link, MsgType.Voice, MsgType.Animation}
+                               MsgType.Link, MsgType.Voice, MsgType.Animation, MsgType.File, MsgType.Video}
 
     # todo supported_message can be dynamically defined by Client
 
@@ -105,5 +105,7 @@ class QQMessengerChannel(SlaveChannel):
         return methods
 
     def __getattr__(self, name):
-        func = getattr(self.QQClient, name)
-        return func
+        def method(*args, **kwargs):
+            func = getattr(self.QQClient, name)
+            func(*args, **kwargs)
+        return method
